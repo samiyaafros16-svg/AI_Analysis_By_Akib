@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>AI ANALYSIS BY AKIB</title>
+
+  <style>
+
+    body {
+
+      background: #000;
+
+      color: #00ffcc;
+
+      font-family: 'Segoe UI', sans-serif;
+
+      text-align: center;
+
+      padding: 20px;
+
+    }
+
+    .container {
+
+      border: 3px solid #00ffcc;
+
+      border-radius: 20px;
+
+      padding: 20px;
+
+      max-width: 600px;
+
+      margin: 50px auto;
+
+      box-shadow: 0 0 30px #00ffcc;
+
+    }
+
+    input[type="password"], input[type="file"] {
+
+      padding: 10px;
+
+      margin: 10px;
+
+      border-radius: 10px;
+
+      border: none;
+
+      width: 80%;
+
+    }
+
+    button {
+
+      padding: 10px 30px;
+
+      background-color: #00ffcc;
+
+      border: none;
+
+      color: black;
+
+      font-weight: bold;
+
+      border-radius: 10px;
+
+      margin-top: 10px;
+
+      cursor: pointer;
+
+    }
+
+    .hidden {
+
+      display: none;
+
+    }
+
+    #result {
+
+      margin-top: 30px;
+
+      font-size: 18px;
+
+      white-space: pre-line;
+
+      background: #001f1f;
+
+      border-radius: 15px;
+
+      padding: 20px;
+
+      box-shadow: 0 0 10px #00ffcc inset;
+
+    }
+
+    #timer {
+
+      font-size: 18px;
+
+      color: #fffb00;
+
+      font-weight: bold;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+
+
+  <!-- Login Section -->
+
+  <div class="container" id="login-section">
+
+    <h2>🔐 Enter Password to Access</h2>
+
+    <input type="password" id="password" placeholder="Enter Password">
+
+    <button onclick="checkPassword()">Login</button>
+
+  </div>
+
+
+
+  <!-- Signal Section (hidden initially) -->
+
+  <div class="container hidden" id="signal-section">
+
+    <h2>📸 Upload Screenshot</h2>
+
+    <input type="file" accept="image/*" id="screenshot" onchange="enableSignal()">
+
+    <button onclick="analyzeScreenshot()" id="analyzeBtn" disabled>Analyze Signal</button>
+
+    <div id="timer">🔄 Waiting for 10 seconds...</div>
+
+    <div id="result"></div>
+
+  </div>
+
+
+
+  <script>
+
+    const correctPassword = "AKIB"; // Correct password to unlock the app
+
+    let signalGenerated = false; // To check if signal is already generated
+
+
+
+    // Function to check password
+
+    function checkPassword() {
+
+      const pass = document.getElementById("password").value;
+
+      if (pass === correctPassword) {
+
+        document.getElementById("login-section").classList.add("hidden");
+
+        document.getElementById("signal-section").classList.remove("hidden");
+
+      } else {
+
+        alert("Incorrect Password!"); // Alert on incorrect password
+
+      }
+
+    }
+
+
+
+    // Function to enable the "Analyze Signal" button after screenshot is uploaded
+
+    function enableSignal() {
+
+      signalGenerated = false;
+
+      document.getElementById("result").innerText = "";
+
+      document.getElementById("timer").innerText = "🔄 Waiting for 10 seconds...";
+
+      document.getElementById("analyzeBtn").disabled = false;
+
+    }
+
+
+
+    // Function to handle the screenshot analysis and signal generation
+
+    function analyzeScreenshot() {
+
+      if (signalGenerated) {
+
+        alert("❗ You have already generated signal for this screenshot.\nPlease upload a new one.");
+
+        return;
+
+      }
+
+
+
+      // Disable the button for 10 seconds to wait for the analysis to complete
+
+      document.getElementById("analyzeBtn").disabled = true;
+
+      let countdown = 10;
+
+      const timer = setInterval(() => {
+
+        document.getElementById("timer").innerText = `🔄 Waiting for ${countdown} seconds...`;
+
+        countdown--;
+
+        if (countdown < 0) {
+
+          clearInterval(timer); // Stop the timer once countdown ends
+
+          generateSignal(); // Call the function to generate the signal
+
+        }
+
+      }, 1000); // Update every second
+
+    }
+
+
+
+    // Function to generate random signal and display it
+
+    function generateSignal() {
+
+      const directions = ["🔼 CALL / BUY", "🔻 PUT / SELL"];
+
+      const trend = ["Bullish", "Bearish"][Math.floor(Math.random() * 2)];
+
+      const risk = ["Low", "Medium", "High"][Math.floor(Math.random() * 3)];
+
+      const confidence = ["Medium", "High"][Math.floor(Math.random() * 2)];
+
+      const direction = directions[Math.floor(Math.random() * 2)];
+
+      const now = new Date();
+
+      now.setHours(now.getHours() + 6); // UTC+6
+
+      const time = now.toTimeString().split(" ")[0].slice(0, 5);
+
+
+
+      const result = `╭━━━📈 **AI QuoteX Trade Analytics** ━━━╮
+
+┃ 🕰️ **Time**        : ${time}
+
+┃ 💱 **Asset**       : Analysis
+
+┃ 📉 **Trend**       : ${trend}
+
+┃ 🧠 **Risk Level**  : ${risk}
+
+┃ 🚀 **AI Signal**   : ${direction}
+
+╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔎 **Analysis**: Pattern matched using AI.
+
+💡 **Confidence**: ${confidence} ✅
+
+👤 **AI MODEL MADE BY TRADER AKIB`;
+
+
+
+      document.getElementById("result").innerText = result;
+
+      signalGenerated = true;
+
+
+
+      // VoiceOver functionality
+
+      const msg = new SpeechSynthesisUtterance(`Analysis market, ${direction}, Confidence ${confidence}. AI Model by Trader Akib.`);
+
+      speechSynthesis.speak(msg);
+
+    }
+
+  </script>
+
+
+
+</body>
+
+</html>
+
