@@ -1,0 +1,2 @@
+# AI_Analysis_By_Akib
+AI BASED QUOTEX TRADING BOT
